@@ -88,6 +88,19 @@ class PrefixType(enum.IntEnum):
     Unreal = 82
     Mythical = 83
     Legendary2 = 84
+    Fabled = 85
+    Loyal = 86
+    Worthy = 87
+    Focused = 88
+    Patient = 89
+    Rabid = 90
+    IllTempered = 91
+    Petty = 92
+    Feeble = 93
+    Skittish = 94
+    Eager = 95
+    Ballistic = 96
+    Scraggling = 97
 
     @classmethod
     @functools.lru_cache(85)
