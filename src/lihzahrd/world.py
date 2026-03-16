@@ -643,6 +643,11 @@ class World:
             are_active=f.bool(),
         )
 
+        # NEW in 1.4.5.6 — 3 new event/status booleans
+        unknown_event_flag_1 = f.bool()  # False in test world  "Canvas_of_Facts.wld"
+        unknown_event_flag_2 = f.bool()  # True in test world "Canvas_of_Facts.wld"
+        unknown_event_flag_3 = f.bool()  # False in test world "Canvas_of_Facts.wld"
+
         party_center_active = f.bool()
         party_natural_active = f.bool()
         party_cooldown = f.int4()
@@ -671,11 +676,11 @@ class World:
 
         # ToDo: Figure out which biomes got new BGs.
         # Oasis and Graveyard probably got new backgrounds.
-        bg_mushroom = f.int1()
-        bg_underworld = f.int1()
-        bg_forest_2 = f.int1()  # Maybe oasis.
-        bg_forest_3 = f.int1()
-        bg_forest_4 = f.int1()
+        bg_mushroom = f.int2()
+        bg_underworld = f.int2()
+        bg_forest_2 = f.int2()  # Maybe oasis.
+        bg_forest_3 = f.int2()
+        bg_forest_4 = f.int2()
 
         backgrounds = Backgrounds(
             underground_snow=bg_underground_snow,
@@ -719,7 +724,7 @@ class World:
 
         treetop_variant_count = f.int4()
         treetop_variants = TreetopVariants(
-            [f.int4() for _ in range(treetop_variant_count)]
+            [f.int2() for _ in range(treetop_variant_count)]
         )
 
         halloween_today = f.bool()
@@ -1102,7 +1107,9 @@ class World:
             is_upside_down=is_upside_down,
             is_trap_world=is_trap_world,
             is_zenith_world=is_zenith_world,
+            is_remix_world=is_remix_world,
             created_on=created_on,
+            last_saved=last_saved,
             styles=world_styles,
             backgrounds=backgrounds,
             spawn_point=spawn_point,
