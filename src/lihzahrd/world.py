@@ -42,7 +42,9 @@ class World:
         is_upside_down: bool,
         is_trap_world: bool,
         is_zenith_world: bool,
+        is_remix_world: bool,
         created_on,
+        last_saved,
         styles: Styles,
         backgrounds: Backgrounds,
         spawn_point: Coordinates,
@@ -215,7 +217,9 @@ class World:
         self.tile_entities: List[TileEntity] = tile_entities
         """A list of tile entities in the world, such as Training Dummies, Item Frames and Logic Sensors."""
 
-        self.weighed_pressure_plates: List[WeighedPressurePlate] = weighed_pressure_plates
+        self.weighed_pressure_plates: List[WeighedPressurePlate] = (
+            weighed_pressure_plates
+        )
         """A list of all Weighed Pressure Plates in the world."""
 
         self.pets: Pets = pets
@@ -277,7 +281,7 @@ class World:
         flags3 = fr.bits() if has_flags3 else INT_TO_BITS_CACHE[0]
         has_flags4 = flags3[0]
         flags4 = fr.bits() if has_flags4 else INT_TO_BITS_CACHE[0]
-            
+
         has_block = flags1[1]
         has_extended_block_id = flags1[5]
         is_block_painted = flags3[3]
@@ -376,12 +380,20 @@ class World:
     @property
     def is_expert(self):
         """If the world is in expert difficulty or not."""
-        return self.difficulty == 1 or self.difficulty == 0 and (self.is_for_the_worthy or self.is_zenith_world)
+        return (
+            self.difficulty == 1
+            or self.difficulty == 0
+            and (self.is_for_the_worthy or self.is_zenith_world)
+        )
 
     @property
     def is_master(self):
         """If the world is in master difficulty or not."""
-        return self.difficulty == 2 or self.difficulty == 1 and (self.is_for_the_worthy or self.is_zenith_world)
+        return (
+            self.difficulty == 2
+            or self.difficulty == 1
+            and (self.is_for_the_worthy or self.is_zenith_world)
+        )
 
     @property
     def is_legendary(self):
@@ -394,7 +406,9 @@ class World:
         return self.difficulty == 3
 
     @classmethod
-    def _create_tilematrix(cls, f, world_size: Coordinates, tileframeimportant: List[bool]):
+    def _create_tilematrix(
+        cls, f, world_size: Coordinates, tileframeimportant: List[bool]
+    ):
         """Create a TileMatrix object from a file."""
         tm = TileMatrix()
         while tm.size.x < world_size.x:
@@ -426,15 +440,22 @@ class World:
 
         relogic = f.string(7)  # TODO: this can appearently be "xindong"?
         if relogic != "relogic":
-            raise ValueError("World file is missing the 'relogic' magic string", relogic)
+            raise ValueError(
+                "World file is missing the 'relogic' magic string", relogic
+            )
 
         savefile_type = f.uint1()
         if savefile_type != 2:
-            raise NotImplementedError("World file uses an unknown savefile type", savefile_type)
+            raise NotImplementedError(
+                "World file uses an unknown savefile type", savefile_type
+            )
 
-        supported_versions = (Version("1.4.4.9"),)
+        supported_versions = (Version("1.4.5.6"),)
         if version not in supported_versions:
-            raise NotImplementedError("World file has been created with a unsupported version of Terraria", version)
+            raise NotImplementedError(
+                "World file has been created with a unsupported version of Terraria",
+                version,
+            )
 
         revision = f.uint4()
         is_favorite = f.uint8() != 0
@@ -465,16 +486,20 @@ class World:
         is_upside_down = f.bool()
         is_trap_world = f.bool()
         is_zenith_world = f.bool()
+        is_remix_world = f.bool()
 
         created_on = f.datetime()
+        last_saved = f.datetime()
 
         world_styles = Styles(
             moon=MoonStyle(f.uint1()),
             trees=FourPartSplit(
-                separators=[f.int4(), f.int4(), f.int4()], properties=[f.int4(), f.int4(), f.int4(), f.int4()]
+                separators=[f.int4(), f.int4(), f.int4()],
+                properties=[f.int4(), f.int4(), f.int4(), f.int4()],
             ),
             moss=FourPartSplit(
-                separators=[f.int4(), f.int4(), f.int4()], properties=[f.int4(), f.int4(), f.int4(), f.int4()]
+                separators=[f.int4(), f.int4(), f.int4()],
+                properties=[f.int4(), f.int4(), f.int4(), f.int4()],
             ),
         )
 
@@ -518,7 +543,9 @@ class World:
         defeated_pirates = f.bool()
 
         shadow_orbs = ShadowOrbs(
-            smashed_at_least_once=f.bool(), spawn_meteorite=f.bool(), evil_boss_counter=f.uint1()
+            smashed_at_least_once=f.bool(),
+            spawn_meteorite=f.bool(),
+            evil_boss_counter=f.uint1(),
         )  # was int4()
 
         altars_smashed = f.int4()
@@ -571,7 +598,8 @@ class World:
 
         angler_today_quest_target = AnglerQuestFish(f.int4())
         anglers_quest = AnglerQuest(
-            current_goal=angler_today_quest_target, completed_by=angler_today_quest_completed_by
+            current_goal=angler_today_quest_target,
+            completed_by=angler_today_quest_completed_by,
         )
 
         saved_stylist = f.bool()
@@ -604,10 +632,14 @@ class World:
         defeated_ice_queen = f.bool()
         defeated_santa_nk1 = f.bool()
         defeated_everscream = f.bool()
-        defeated_pillars = PillarsInfo(solar=f.bool(), vortex=f.bool(), nebula=f.bool(), stardust=f.bool())
+        defeated_pillars = PillarsInfo(
+            solar=f.bool(), vortex=f.bool(), nebula=f.bool(), stardust=f.bool()
+        )
 
         lunar_events = LunarEvents(
-            pillars_present=PillarsInfo(solar=f.bool(), vortex=f.bool(), nebula=f.bool(), stardust=f.bool()),
+            pillars_present=PillarsInfo(
+                solar=f.bool(), vortex=f.bool(), nebula=f.bool(), stardust=f.bool()
+            ),
             are_active=f.bool(),
         )
 
@@ -626,7 +658,12 @@ class World:
             partying_npcs=partying_npcs,
         )
 
-        sandstorm = Sandstorm(is_active=f.bool(), time_left=f.int4(), severity=f.single(), intended_severity=f.single())
+        sandstorm = Sandstorm(
+            is_active=f.bool(),
+            time_left=f.int4(),
+            severity=f.single(),
+            intended_severity=f.single(),
+        )
 
         saved_bartender = f.bool()
 
@@ -644,7 +681,10 @@ class World:
             underground_snow=bg_underground_snow,
             underground_jungle=bg_underground_jungle,
             hell=bg_hell,
-            forest=FourPartSplit(world_styles.trees.separators, [bg_forest, bg_forest_2, bg_forest_3, bg_forest_4]),
+            forest=FourPartSplit(
+                world_styles.trees.separators,
+                [bg_forest, bg_forest_2, bg_forest_3, bg_forest_4],
+            ),
             corruption=bg_corruption,
             jungle=bg_jungle,
             snow=bg_snow,
@@ -662,7 +702,7 @@ class World:
             nights_on_cooldown=f.int4(),
             genuine=f.bool(),
             manual=f.bool(),
-            next_night_is_lantern_night=f.bool()
+            next_night_is_lantern_night=f.bool(),
         )
 
         events = Events(
@@ -678,7 +718,9 @@ class World:
         )
 
         treetop_variant_count = f.int4()
-        treetop_variants = TreetopVariants([f.int4() for _ in range(treetop_variant_count)])
+        treetop_variants = TreetopVariants(
+            [f.int4() for _ in range(treetop_variant_count)]
+        )
 
         halloween_today = f.bool()
         xmas_today = f.bool()
@@ -687,7 +729,9 @@ class World:
         ore_2 = BlockType(f.int4())
         ore_3 = BlockType(f.int4())
         ore_4 = BlockType(f.int4())
-        saved_ore_tiers = SavedOreTiers(ore_1, ore_2, ore_3, ore_4, hardmode_ore_1, hardmode_ore_2, hardmode_ore_3)
+        saved_ore_tiers = SavedOreTiers(
+            ore_1, ore_2, ore_3, ore_4, hardmode_ore_1, hardmode_ore_2, hardmode_ore_3
+        )
 
         pets = Pets(cat=f.bool(), dog=f.bool(), bunny=f.bool())
 
@@ -789,6 +833,7 @@ class World:
             moondial_is_running=moondial_is_running,
         )
 
+        generator_pass_results_json = f.string()
         unknown_world_header_data = f.read_until(pointers.world_tiles)
 
         # Tiles
@@ -812,11 +857,15 @@ class World:
                 if item_quantity > 0:
                     item_type = ItemType(f.int4())
                     item_modifier = PrefixType.get(f.uint1())
-                    item = ItemStack(quantity=item_quantity, type_=item_type, prefix=item_modifier)
+                    item = ItemStack(
+                        quantity=item_quantity, type_=item_type, prefix=item_modifier
+                    )
                 else:
                     item = None
                 chest_contents.append(item)
-            chest = Chest(position=chest_position, name=chest_name, contents=chest_contents)
+            chest = Chest(
+                position=chest_position, name=chest_name, contents=chest_contents
+            )
             chests.append(chest)
             tm[chest.position].extra = chest
 
@@ -856,7 +905,11 @@ class World:
             npc_variation_index = f.int4() if npc_flags[0] else 0
 
             npc = NPC(
-                type_=npc_type, name=npc_name, position=npc_position, home=npc_home, variation_index=npc_variation_index
+                type_=npc_type,
+                name=npc_name,
+                position=npc_position,
+                home=npc_home,
+                variation_index=npc_variation_index,
             )
             npcs.append(npc)
 
@@ -883,7 +936,11 @@ class World:
             # Item Frame
             elif te_type == 1:
                 te_extra = ItemFrame(
-                    item=ItemStack(type_=ItemType(f.int2()), prefix=PrefixType.get(f.uint1()), quantity=f.int2())
+                    item=ItemStack(
+                        type_=ItemType(f.int2()),
+                        prefix=PrefixType.get(f.uint1()),
+                        quantity=f.int2(),
+                    )
                 )
             # Logic Sensor
             elif te_type == 2:
@@ -892,24 +949,36 @@ class World:
             elif te_type == 3:
                 item_flags = f.bits()
                 dye_flags = f.bits()
-                mannequin_items: List[Optional[ItemStack]] = [None for _ in range(len(item_flags))]
-                mannequin_dyes: List[Optional[ItemStack]] = [None for _ in range(len(dye_flags))]
+                mannequin_items: List[Optional[ItemStack]] = [
+                    None for _ in range(len(item_flags))
+                ]
+                mannequin_dyes: List[Optional[ItemStack]] = [
+                    None for _ in range(len(dye_flags))
+                ]
                 for index, flag in enumerate(item_flags):
                     if not flag:
                         continue
                     mannequin_items[index] = ItemStack(
-                        type_=ItemType(f.int2()), prefix=PrefixType.get(f.int1()), quantity=f.int2()
+                        type_=ItemType(f.int2()),
+                        prefix=PrefixType.get(f.int1()),
+                        quantity=f.int2(),
                     )
                 for index, flag in enumerate(dye_flags):
                     if not flag:
                         continue
                     mannequin_dyes[index] = ItemStack(
-                        type_=ItemType(f.int2()), prefix=PrefixType.get(f.int1()), quantity=f.int2()
+                        type_=ItemType(f.int2()),
+                        prefix=PrefixType.get(f.int1()),
+                        quantity=f.int2(),
                     )
                 te_extra = Mannequin(mannequin_items, mannequin_dyes)
             # Weapon Rack
             elif te_type == 4:
-                rack_item = ItemStack(type_=ItemType(f.int2()), prefix=PrefixType.get(f.int1()), quantity=f.int2())
+                rack_item = ItemStack(
+                    type_=ItemType(f.int2()),
+                    prefix=PrefixType.get(f.int1()),
+                    quantity=f.int2(),
+                )
                 te_extra = WeaponRack(rack_item)
             # Hat Rack
             elif te_type == 5:
@@ -922,18 +991,26 @@ class World:
                     if not flag:
                         continue
                     rack_items[index] = ItemStack(
-                        type_=ItemType(f.int2()), prefix=PrefixType.get(f.int1()), quantity=f.int2()
+                        type_=ItemType(f.int2()),
+                        prefix=PrefixType.get(f.int1()),
+                        quantity=f.int2(),
                     )
                 for index, flag in enumerate(item_flags[2:4]):
                     if not flag:
                         continue
                     rack_dyes[index] = ItemStack(
-                        type_=ItemType(f.int2()), prefix=PrefixType.get(f.int1()), quantity=f.int2()
+                        type_=ItemType(f.int2()),
+                        prefix=PrefixType.get(f.int1()),
+                        quantity=f.int2(),
                     )
                 te_extra = HatRack(rack_items, rack_dyes)
             # Food Plate
             elif te_type == 6:
-                plate_item = ItemStack(type_=ItemType(f.int2()), prefix=PrefixType.get(f.int1()), quantity=f.int2())
+                plate_item = ItemStack(
+                    type_=ItemType(f.int2()),
+                    prefix=PrefixType.get(f.int1()),
+                    quantity=f.int2(),
+                )
                 te_extra = Plate(plate_item)
             # Teleport Pylon
             elif te_type == 7:
@@ -964,7 +1041,9 @@ class World:
         rooms = []
 
         for _ in range(rooms_count):
-            room = Room(npc=EntityType(f.int4()), position=Coordinates(f.int4(), f.int4()))
+            room = Room(
+                npc=EntityType(f.int4()), position=Coordinates(f.int4(), f.int4())
+            )
             rooms.append(room)
 
         unknown_town_manager_data = f.read_until(pointers.bestiary)
@@ -978,7 +1057,9 @@ class World:
         bestiary_sightings = [EntityType[f.string()] for _ in range(f.int4())]
         bestiary_chats = [EntityType[f.string()] for _ in range(f.int4())]
 
-        bestiary = Bestiary(chats=bestiary_chats, kills=bestiary_kills, sightings=bestiary_sightings)
+        bestiary = Bestiary(
+            chats=bestiary_chats, kills=bestiary_kills, sightings=bestiary_sightings
+        )
 
         unknown_bestiary_data = f.read_until(pointers.journey_powers)
 
