@@ -4,7 +4,8 @@ import enum
 class BlockType(enum.IntEnum):
     """All possible block types.
 
-    Data from https://github.com/tModLoader/tModLoader/wiki/Vanilla-Tile-IDs and https://github.com/TerraMap/windows/blob/master/Data/tiles.xml."""
+    Data from https://github.com/tModLoader/tModLoader/wiki/Vanilla-Tile-IDs and https://github.com/TerraMap/windows/blob/master/Data/tiles.xml.
+    """
 
     DIRT = 0
     STONE = 1
@@ -699,6 +700,66 @@ class BlockType(enum.IntEnum):
     XENON_MOSS_BLOCK = 690
     VIOLET_MOSS_BLOCK = 691
     RAINBOW_MOSS_BLOCK = 692
+    STALACTITE_1X1_ECHO = 693
+    STALACTITE_1X2_ECHO = 694
+    DEMON_ALTAR_REPLICA = 695
+    SHADOW_ORBS_REPLICA = 696
+    COBWEB_REPLICA = 697
+    DEAD_CELLS_DISPLAY_JAR = 698
+    DEAD_CELLS_POTION_STATION = 699
+    ABIGAILS_FLOWER_REPLICA = 700
+    GLOW_TULIP_REPLICA = 701
+    LIFE_FRUIT_REPLICA = 702
+    JUNGLE_PLANTS_ECHO = 703
+    FALLEN_LOG_ECHO = 704
+    OASIS_PLANTS_ECHO = 705
+    TERRAGRIM_SHRINE_ECHO = 706
+    BOOKS_ECHO = 707
+    SHIMMERFALL = 708
+    SHIMMER_DRIP = 709
+    PUFFERFISH_CAGE = 710
+    RAINBOW_BOULDER = 711
+    POULDER = 712
+    LAVA_BOULDER = 713
+    SPIDER_BOULDER = 714
+    GHOULDER = 715
+    BOULDER_THAT_SPAWNS_PET = 716
+    LAVA_CLOUD = 717
+    STAR_CLOUD = 718
+    RAINBOW_CLOUD = 719
+    CRTMONOLITH = 720
+    RETRO_MONOLITH = 721
+    FALLEN_STAR_BLOCK = 722
+    KITE_ANCHOR = 723
+    CRITTER_ANCHOR = 724
+    NOIR_MONOLITH = 725
+    CANNON_BALL = 726
+    TEAM_BLOCK_RED_VARIANT = 727
+    TEAM_BLOCK_GREEN_VARIANT = 728
+    TEAM_BLOCK_BLUE_VARIANT = 729
+    TEAM_BLOCK_YELLOW_VARIANT = 730
+    TEAM_BLOCK_PINK_VARIANT = 731
+    TEAM_BLOCK_WHITE_VARIANT = 732
+    RADIO_THING_MONOLITH = 733
+    FEYWOOD = 734
+    HALLOWED_BRICK = 735
+    EASTER_BLOCK = 736
+    GOTHIC_BRICK = 737
+    FLINX_FUR_BLOCK = 738
+    JELLYFISH_BLOCK = 739
+    TOY_BREAKER_BLOCK = 740
+    PINE_WOOD_BLOCK = 741
+    HARPY_BLOCK = 742
+    MOONPLATE_BLOCK = 743
+    LIBRARIAN_BLOCK = 744
+    SPIKE_BLOCK = 745
+    OFFICE_BLOCK = 746
+    FORBIDDEN_BLOCK = 747
+    WATER_BLOCK = 748
+    BOULDER_BLOCK = 749
+    DAMAGING_SPIKE_BLOCK = 750
+    PALWORLD_DIGTOISE_SLEEPING = 751
+    PALWORLD_CHILLET_EGG = 752
 
     def __repr__(self):
         return f"{self.__class__.__name__}.{self.name}"

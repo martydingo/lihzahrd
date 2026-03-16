@@ -670,17 +670,36 @@ class World:
             intended_severity=f.single(),
         )
 
+        # unknown_new_bool_1 = f.bool()
+
+        ## Changed in 1.4.5.6
+        # saved_bartender = f.bool()
+
+        # old_ones_army = OldOnesArmyTiers(f.bool(), f.bool(), f.bool())
+
+        # # ToDo: Figure out which biomes got new BGs.
+        # # Oasis and Graveyard probably got new backgrounds.
+        # bg_mushroom = f.int2()
+        # bg_underworld = f.int2()
+        # bg_forest_2 = f.int2()  # Maybe oasis.
+        # bg_forest_3 = f.int2()
+        # bg_forest_4 = f.int2()
+
+        # 1.4.5.6: new unknown flag + per-column treetop variant array (uint16, implicit count)
+        unknown_new_flag = f.bool()
+
+        treetop_v2_count = math.ceil(world_size.x / 29)
+        treetop_variants_v2 = TreetopVariants(
+            [f.int2() for _ in range(treetop_v2_count)]
+        )
+
         saved_bartender = f.bool()
-
         old_ones_army = OldOnesArmyTiers(f.bool(), f.bool(), f.bool())
-
-        # ToDo: Figure out which biomes got new BGs.
-        # Oasis and Graveyard probably got new backgrounds.
-        bg_mushroom = f.int2()
-        bg_underworld = f.int2()
-        bg_forest_2 = f.int2()  # Maybe oasis.
-        bg_forest_3 = f.int2()
-        bg_forest_4 = f.int2()
+        bg_mushroom = f.int1()
+        bg_underworld = f.int1()
+        bg_forest_2 = f.int1()
+        bg_forest_3 = f.int1()
+        bg_forest_4 = f.int1()
 
         backgrounds = Backgrounds(
             underground_snow=bg_underground_snow,
@@ -724,7 +743,7 @@ class World:
 
         treetop_variant_count = f.int4()
         treetop_variants = TreetopVariants(
-            [f.int2() for _ in range(treetop_variant_count)]
+            [f.int4() for _ in range(treetop_variant_count)]
         )
 
         halloween_today = f.bool()
